@@ -174,7 +174,7 @@ select {
   color: var(--ink);
   font-size: 12px;
 }
-.select-wrap:after { content: "⌄"; position: absolute; right: 12px; top: 7px; pointer-events: none; color: #397ba5; }
+.select-wrap:after { content: "⌄"; position: absolute; right: 12px; top: 4px; pointer-events: none; color: #397ba5; }
 .shuffle-button {
   display: inline-flex;
   align-items: center;
