@@ -1,0 +1,437 @@
+All Questions and Answers for the Oral Exam
+
+
+Week 3: Simple regression
+
+
+1. OLS. What does this abbreviation stand for? What does it mean?
+
+
+OLS stands for Ordinary Least Squares, and it means that we want to find the coefficients of the linear regression that minimizes the sum of square residuals. So we try to find the line in the space of points that has the lowest sum of square residuals, hence the name. 
+
+
+2. How do we interpret the coefficient of interest? [e.g., test_score = α + β teacher_student_ratio + u]
+
+
+Here, the test score is regressed on the teacher to student ratio, so an increase of teacher to student ratio by one unit is associated with the test score going up by beta units. 
+
+
+3. How do we test whether a coefficient is different from zero? [t-statistics]
+
+
+When we run a regression we get a coefficient and its standard error. If we divide the coefficient by the standard error, we get the t-statistics, and if this value on absolute terms is above 1.96, we could say that on a 5% significance level, we can reject the hypothesis that the coefficient is zero. 
+
+
+4. Economic significance. How do we measure it? Why do we need it?
+
+
+When we run a regression, we get a coefficient and its standard error, and the larger the data is, the smaller the standard error would be, meaning that we’re more likely to find a statistically significant coefficient. It could be significant despite it being small, so in order to actually find how important this actually is, we can do some rescaling. We can divide the independent and dependent variables by their respective standard deviations, and then see how many standard deviations y increases with when x increases by one standard deviation. We now have a relative interpretations, relative to the distributions, useful for finding the “actual” effect for implementing policy for example.
+
+
+5. How do we measure goodness of fit? [R-squared, intuition behind its construction, limitations]
+
+
+We look at R-squared, which shows us how close our points are to the line that we put through the cloud of points. So effectively, it scales the variance of the prediction to the variance of the sample. The closer our points are to the line, the larger the R-squared, on a scale from 0 to 1. The main limitation is that a larger R squared doesn’t mean that the relationship is causal.
+
+
+________________
+
+
+Week 4: Multiple regression
+
+
+6. Why do we include control variables in regressions?
+
+
+Because we want to more accurately measure the coefficient of interest. When we run a simple regression, we are likely to have an omitted variable bias. Our coefficient could be biased, so by including omitted variables that bias the coefficient will make our estimate more accurate.
+
+
+7. How do we interpret the coefficient of interest in a multiple regression? [e.g., test_score = α + β teacher_student_ratio + γ avg_f amily_income + u]
+
+
+In this example, keeping average family income fixed, when teacher to student ratio goes up by one unit, test score goes up by beta units. The important difference between simple regression is that we have to keep average family income fixed, which is the variable we are controlling for in this case.
+
+
+8. What is adjusted R-squared? Why do we need it? [intuition behind its construction, limitations]
+
+
+It’s a simple R squared minus a penalty depending on the number of control variables we’ve included. The problem with the simple R-squared is that if we have 2 regressions with different number of control variables, the regression with more controls will mechanically have a larger R square. So to compare models with different numbers of control variables, we should equalize them by adjusting for the number of controls. It allows us to compare regressions, but it still doesn’t tell us anything about whether or not the relationship is causal. 
+
+
+9. What is F-test? Why is t-test not enough?
+
+
+When we have a regression with several variables, we might have a question, are beta 1 and beta 2 both equal to zero at the same time? If we have a test on several coefficients, we need an F-test to determine if they’re jointly zero. We can’t use individual t-statistics, because they would overstate or understate the significance (both variables could be insignificant individually but jointly significantly for instance).
+
+
+10. Which hypotheses can we test with F-test?
+
+
+Any linear hypothesis, which means that we could construct a hypothesis by creating a linear combination of the coefficients. For example, is beta plus gamma equal to zero, or is beta times 2 equal to zero. But we cannot test if beta times gamma is equal to zero for instance.
+
+
+________________
+
+
+Week 5: Assumptions and biases
+
+
+11. OLS assumption 1: Zero conditional mean. What is it? What happens if it doesn’t hold?
+
+
+The zero conditional mean assumption is that on average, the errors of the regression, given any value of our independent variable, is zero. We can’t test it because when we run the regression, we only see u hat, which are the estimates of the errors, which could be different from the true errors which are unobservable. So if this condition fails, then we have an omitted variable bias and our coefficients are different from what happens in reality.
+
+
+12. OLS assumption 2: Random sampling. What is it? What happens if it doesn’t hold?
+
+
+Random sampling assumes that the data we have gathered for our regression is taken randomly from the population we want to measure. If our sampling is not random, like if we for instance only survey people in the park in the morning as an estimate of the general population of a country, we will have a selection bias, and we won’t be able to extrapolate the results of the study to the rest of the population. So it weakens the external validity of the research.
+
+
+13. OLS assumption 3: Rare outliers. What is it? What happens if it doesn’t hold?
+
+
+When we collect our data, it could be that some points are far away from the main “cloud”, which are called outliers. The problem with these outliers is that they could have a large impact on the OLS slope. This happens because OLS tries to sum the square residuals, so a large residual becomes even larger since it’s squared, shifting our total curve significantly and making the conclusion different from reality. With a large sample, each outlier will have little weight.
+
+
+14. OLS assumption 4: No multicollinearity. What is it? What happens if it doesn’t hold?
+
+
+Multicollinearity is a problem with the control variables. If two variables that we use are very correlated with each other, the regression will have a hard time estimating the effect of each variable individually, because it will not be able to isolate the effect into individual effects, since this is so rare in the sample. This means that in the estimate, we will have large standard errors. The coefficients are not biased, but their power is reduced because their standard errors will be huge.
+
+
+15. VIF. What is it? Why do we need it?
+
+
+Variance inflation factor. It is a metric for us to see if we have multicollinearity as a problem. We regress one of our control variables on our other control variables and check on R-squared. If R square is large, meaning that the other control variables explain almost all variation in our first control variable, then we would say that we have a problem with multicollinearity. VIF translates these R-squared values into some number, and as a rule of thumb, if it is above 10, we say that we have a multicollinearity problem. VIF above 10 is around R-squared around 90%. 
+
+
+
+
+16. Which methods are used to deal with outliers?
+
+
+Winsorization and trimming. Winsorization involves us looking at the distribution of some characteristic, and we say that all values at the tail ends, for instance the bottom and top 1%, should change their values exactly to the value of the 1st or the 99th percentile. So we move outliers closer to the center. Alternatively, we could just remove the outliers altogether, and this is known as trimming.
+
+
+17. OLS property 1: Unbiased. What is it? Why is it important?
+
+
+Unbiased means that on average, the coefficient estimated from the regression coincides with the true coefficient in reality. It is important because we want to know the exact size of an effect to draw a meaningful conclusion of a policy for instance, and so it’s good to know if our estimate on average coincides with the truth.
+
+
+18. OLS property 2: Consistent. What is it? Why is it important?
+
+
+Consistency is, the larger the sample size, the closer our estimated coefficient is to the true coefficient. It is important because it tells us that with enough data, our estimates will coincide with the truth, which is useful to know when evaluating the effect of a policy for instance.
+
+
+19. OLS property 3: Normally distributed. What is it? Why is it important?
+
+
+Each time we generate new regression coefficients from different samples of a population, we will get different coefficients. If we repeat this enough times, and then build a histogram of our estimates that we have obtained, we will find that they are normally distributed around the true estimate. We know we converge to the truth, the shape at which we do it, and how likely we are to be away from the truth (thanks to the central limit theorem). It is important because we can now do hypothesis testing, since we know the exact number for the t-statistic (1.96) to compare a new estimate with. 
+
+
+20. Heteroscedasticity of errors. What is it? Why should we care about it?
+
+
+When we estimate our regression we get our coefficient of interest and our standard error. The standard error is assumed by R to be homoscedastic, which means that all errors regardless of observation are drawn from a distribution with the same variance. In reality, the size of the error could depend on the characteristics of the observation, aka heteroscedasticity. We can therefore tell R to estimate standard errors of every observation separately instead of assuming they’re all the same, meaning we correct for heteroscedasticity. By doing so, we change the standard error estimate, and we get a different t-statistic, which could change our inference. We don’t lose by correcting for heteroscedasticity, so it doesn’t hurt to do it. 
+
+
+
+
+21. Biases: Sample selection bias. What is it? How can we correct it?
+
+
+Sample selection bias occurs if our sample is not representative of the population, and we would like to make an inference from the sample to the population. There are technical ways one can correct for this, but a simple solution is getting a more correct sample.
+
+
+22. Biases: Omitted variable bias. What is it? How can we correct it?
+
+
+Happens if we run a regression and there is some variable sitting in the error term which is correlated both to our variable of interest and the dependent variable. In this case, our coefficient will not on average be equal to the coefficient in reality. So OLS property 1, being unbiased, will not be fulfilled. We can correct it with various methods. If we know the omitted variable, we can simply include it into the regression. Additionally, we could use other techniques, such as instrumental variables or difference-in-differences. 
+
+
+23. Biases: Simultaneity bias. What is it? How can we correct it?
+
+
+Simultaneity bias happens when we have two variables which are jointly determined, such as price and quantity in a market. By regressing prices on quantity, we can’t build a demand curve, we only get the intersection of the two. If we want to uncover a demand curve, we need to have a fixed demand curve and only move the supply curve. This can be done by using instrumental variables, such as a shock that affects only the supply and not the demand. This corrects for the bias and we can uncover the demand curve.
+
+
+24. Biases: Attenuation bias. What is it? How can we correct it?
+
+
+A bias that occurs when our main independent variable is measured with noise. The problem becomes that our coefficient of interest will be biased towards zero. We can correct for this by either measuring the variable more accurately, or we could use an instrument, which can vary the variable without changing the noise. 
+
+
+________________
+
+
+Week 6: Non-linear functional form
+
+
+25. Polynomials. How do we interpret coefficients? [e.g., wage = α + β1 age + β2 age2 + u]
+
+
+For example, if beta 1 is positive and beta 2 is negative, the higher the age is, the lower its effect on wage. Importantly, we cannot interpret age by fixing age squared, unlike in a regular multiple regression. The effect of age on wage depends on what age is. 
+
+
+26. Log transformation. How do we interpret coefficients? [e.g., log(wage) = α + β age + u or log(quantity) = α + β log(price) + u]
+
+
+The log-transformation changes the interpretation from units to percent for the logged variable. In the first example, if age goes up by one unit, wage increases with beta*100%. In the second example, if prices increase with 1%, quantity goes up by beta %. This is only a rule of thumb, but is accurate with small coefficients.
+
+
+27. Interactions. How do we interpret coefficients? [e.g., wage = α + β1*age + β2*Ind + β3*age*Ind + u, where Ind equals one for jobs in technical industries (like oil, IT)]
+
+
+The effect of age on wage depends on which industry the person works in, since we have an interaction between age and industry with beta 3 here. If the person works in a technical industry, the effect of one unit of age on wage will be beta 1 + beta 3, and only beta 1 for non-technical. This interaction allows for us to have different slopes depending on industry or not. 
+________________
+
+
+Week 7: Binary dependent variable
+
+
+28. What is a binary variable? Give an example.
+
+
+A binary dependent variable is one that only takes on two values, for example zero or one. An example would be if a student attends an econometrics class or doesn’t attend the class, as the dependent variable.
+
+
+29. Linear probability model (LPM). What is it? How do we interpret coefficient of interest? [e.g., loan_approval = α + β wage + u, where loan_approval equals one for applicants whose loans were approved]
+
+
+Linear probability model is effectively a regression where the dependent variable is binary, and it’s showing the likelihood of the dependent being equal to one given the independent variable. In this example, loan approval either equals one if the loan is approved or zero if it is not, and if wage goes up by one unit, loan_approval goes up by beta*100 percentage points. 
+
+
+30. Logit and probit regressions. What are their benefits relative to LPM?
+
+
+LPM has drawbacks. Since it is linear, we risk estimated likelihoods for certain applicants to be above 1 or below 0. Furthermore, every unit of wage will have the same impact on the likelihood of getting credit, no matter whether the person has a low, middle or high wage. In reality, it could be that for a very poor person, getting one extra dollar in income does not have the same increase in probability as a middle income person right on the cusp of getting approved. If we want to model a non-linear impact, we go beyond a linear model and transform the model to bound the values between zero and one. This is what logit and probit do. 
+
+
+31. How can you estimate marginal effects of logit and probit regressions? [average marginal effect, marginal effect at the mean]
+
+
+Since our models are not linear, the marginal effect depends on the characteristics of each entity. We have two options. We can, for every person in the sample, estimate the marginal effect, and take the average (average marginal effect). Alternatively, we can take the person with average characteristics, and for just this person find the marginal effect (marginal effect at the mean). 
+
+
+32. What does MLE stand for? What is the intuition behind its construction?
+
+
+Maximum likelihood estimator. Given the data you actually observed, which coefficients would have made that data most likely to happen? You then pick the exact coefficient values that reach the peak of that likelihood score, declaring them the best fit for our logit or probit model. 
+
+
+
+
+
+
+
+33. What is McFadden R-squared? Why is simple R-squared bad?
+
+
+McFadden R-squared is a goodness-of-fit measure for logit and probit models. It compares how much better our unconstrained model is to a baseline, constrained model with no predictor variables (just a constant). Simple R-squared can be inaccurate. As an example, if 1% of all loans a bank issues default, and the bank decides to just write loans to everyone, on the surface, it’s a good strategy since they’re right 99% of all times, but it fails exactly where it should be careful. Furthermore simple R-squared assumes a linear model and normal distribution of errors but these models built for binary outcomes are strictly bounded between 0 and 1 and could have binary residual distribution.
+
+
+34. How do you test hypotheses in logit and probit? [LR-test, intuition behind its construction]
+
+
+To test hypotheses, we build on the maximum likelihood estimation by calculating the likelihood of seeing the data on a constrained and unconstrained model, and find a ratio by dividing the constrained by the unconstrained (aka the Likelihood Ratio). Based on the obtained value of this ratio, we can determine if the constraints matter, by first transforming it and then comparing it to a chi-squared distribution. 
+
+
+________________
+
+
+Week 8: Panel data analysis
+
+
+35. What is cross-sectional data, time-series data, and panel data? Provide examples.
+
+
+Cross-sectional data is when we have different entities at the same point in time, such as GDP for several countries, all for 2025. Time-series data is when we have one entity at many points in time, such as GDP of Norway from 2000 to 2025. Panel data is the combination of the two, such as having GDP for all European countries between 2000 and 2025. 
+
+
+36. First Difference Estimator. How is it constructed? When can it be used?
+
+
+The first-difference estimator is a panel data technique that subtracts a unit’s past values from its current values to eliminate unobserved, time-invariant confounding factors. For instance we have the GDP of Norway in 2001 and 2000, and we can estimate the difference between the two years. It requires us having at least one entity across two time periods, so it won’t work on cross-sectional data. 
+
+
+37. Pooled OLS vs First Difference Estimator. When is the second estimator better?
+
+
+Pooled OLS, as the name sort of implies, pools all data across all entities and time periods together and runs a regular regression. So we ignore the fact that the data is panel, and all fixed characteristics get thrown into the error term and we get a biased coefficient. We could instead use the first difference estimator by taking the difference between periods, in effect removing entity-specific characteristics. FD is therefore better in cases where there are entity fixed effects that bias the coefficient of interest.
+
+
+38. Entity-demeaned estimator. Why is it useful?
+
+
+The entity-demeaned estimator subtracts each entity’s average over time from the variables, and this cancels out the fixed effect. It is useful when we have panel data with more than 2 periods and want to remove time-invariant unobserved factors that would otherwise bias the estimates.
+
+
+39. How do we interpret coefficient of interest in regressions with entity fixed effects? [e.g., market_to_book_ratioi,t =αi + β R&D_spendingsi,t + ui,t]
+
+
+Since we have fixed for entity fixed effects here, we can say that a one unit increase in R&D spending for a specific firm is associated with an increase in that firm’s market to book ratio by beta units. The beta is the same for all firms, but they will have different intercepts alpha (fixed effect).
+
+
+40. How can we deal with fixed effects?
+
+
+Two ways. First, we can get rid of fixed effects by using an entity-demeaned estimator. Second, we can estimate fixed effects by creating a binary variable for each entity, include all these fixed effects in the model, and estimate the model with every fixed effect. In this case we will get estimates of each fixed effect together with our variable of interest, so the coefficient will be unbiased (at least not biased by the fixed effects). 
+
+
+41. Zero conditional mean assumption. What changes relative to simple OLS assumption?
+
+
+In the simple OLS assumption, since simple OLS is not panel data, it is sufficient to say that expected error for some individual given the data for this individual is zero. However, for panel data, for each entity we now have many time observations, and the zero conditional mean will take all this history into account. On average, the error for the individual given all data we have for this individual should be zero.
+
+
+42. Clustered standard errors. Why do we need them?
+
+
+The problem becomes that we previously used heteroscedastic standard errors. In a panel setting, these standard errors imply that errors in the regression are independent. What clustered standard errors do is that we now allow the standard errors of an entity to be correlated between time periods. In practice, we estimate extra errors in the variance-covariance matrix of the error terms. It is better to correct for clustering rather than not, since adding it does no harm. The rule of thumb is that we need at least 50 clusters since we rely on the central limit theorem.
+
+
+________________
+
+
+Week 9: Event study
+
+
+43. Price-based event studies vs value event studies. What’s the difference? Why do we need them?
+
+
+Price-based event studies challenge the efficient market hypothesis. We might wonder, is information reflected into prices of a stock immediately, as the EMH stipulates? Value event studies take the EMH as given, and we assume that when an event happens, prices immediately reflect all information, so we can estimate the impact of this information on firms by doing an event study. 
+
+
+44. Which steps should you undertake to perform an event study?
+
+
+We first determine which event it is we’re interested in. Then determine the day or hour of which this event occurred, and based on this we create an estimation window to find “regular” returns, which we use to compare the returns of the event window with to create abnormal return, and using these abnormal returns we can construct a test for significance.
+
+
+45. How does a usual timeline in an event study look like?
+
+
+After finding day 0, we go back a certain time period and find an estimation window to estimate our normal returns model. We usually leave a small gap between the estimation window and the event day, in case some information leaks prior to the event. After the event we assess abnormal returns in our event window by comparing with what is estimated using the normal returns model. If we want to look far into the future, we might want to establish a post event window.
+
+
+46. Why do we need an estimation window?
+
+
+2 reasons. Firstly, estimation windows allow us to find a normal return model for the stock, such that we can find market beta for instance. This is useful because if the event day was a day where the market did very well, the abnormal returns should account for that. Secondly, we get the variance of the noise as a proxy of the uncertainty. So when we create a t-statistic to determine significance of our abnormal returns, the denominator will be the daily volatility of the stock prices from our estimation window.
+
+
+47. How do we assess whether an event leads to a significant market reaction?
+
+
+We construct a t-statistic, with abnormal return in the numerator and standard deviation from the estimation window in the denominator. If the absolute value of the t-statistic is above 1.96, we can say that the reaction for the event was significant at a 5% level. 
+
+
+________________
+
+
+Week 10: Instrumental variables
+
+
+48. What do abbreviations “IV” and “2SLS” stand for?
+
+
+IV stands for instrumental variables, 2SLS stands for 2-stage least squares.
+
+
+49. Why do we need an IV regression? Which issues can it solve?
+
+
+IV regression can help us solve omitted variable bias, simultaneity bias and attenuation bias. 
+
+
+50. Good instrument: Relevance. What is it? What happens if this property is missing?
+
+
+Relevance is if our instrument is correlated with the endogenous variable X. So we originally regress Y on X, and we worry that X is correlated with the error term, so the coefficient for X could be biased. So we want to move X with some variable not correlated with the error term, called the instrument. Our instrument should be able to move X. That is relevancy. If our instrument has nothing to do with X then it is not relevant and if we try to use it we would still have a biased coefficient since it doesn’t move X.
+
+
+51. How can we check whether an instrument is relevant?
+
+
+This is the 1st stage of the 2SLS. We regress X on the instrument Z, and potentially some other control variables, and then we perform a test that the coefficient of Z is significant, with an F-stat that should be above 10. It has to be strong, and an F-test above 10 is around a t-stat of around 3.3. 
+
+
+52. Good instrument: Exogeneity. What is it? What happens if this property is missing?
+
+
+X is endogenous because there is something sitting in the error term which is correlated between both X and Y. If Z is also correlated with the error term, it is as bad as X. Z should not be correlated with the error term u in the main regression - it should affect Y only through X, and this is exogeneity.
+
+
+53. Why should you estimate 2SLS regression in one go?
+
+
+If we run it in two steps, the second step doesn’t know that it uses an estimate from the first step. This means that the second step will get incorrect standard errors. The inference might therefore be wrong. Performing in one go corrects for all the standard errors. 
+
+
+54. How many instruments do you need if you have 3 endogenous variables? Which properties should these instruments have?
+
+
+At least 3. The instruments should be jointly relevant, so in the first stage of the 2SLS, we will regress every one of the endogenous variables on the whole set of instruments, and these instruments should jointly always pass the F test of 10. Additionally, each instrument should individually be exogenous, and this is hard to be tested so it requires proper reasoning by us. 
+
+
+55. What is the J-test? What does it show?
+
+
+The J-test is the only way for us to assess the exogeneity of the instruments. To use this test, we need to have more instruments than the number of endogenous variables. The test will show us whether some of the instruments are endogenous, but the problem is that it won’t tell us which ones, and this is left up to our own judgements. 
+
+
+________________
+
+
+Week 11: Difference in differences estimator
+
+
+56. Why are experiments useful?
+
+
+Because they allow us to measure the coefficient of interest, in a controlled way. We don’t worry about omitted variables because we control the selection and control variables.
+
+
+57. What is the difference between experiments and quasi-experiments?
+
+
+In experiments, we select who gets treatments and controls. In quasi-experiments, nature selects for us. Experiments are sometimes impossible or prohibitively expensive to implement, while nature does this for us and we have to take data as given.
+
+
+58. What is internal validity? When can it break down?
+
+
+The property that the estimate obtained from the experiments we measure is actually measuring what we intend to measure. Can break down subject behavior is affected by being in the experiment, if we fail to follow strict protocol, fail to randomize or if there is attrition amongst the subjects.
+
+
+59. What is external validity? When can it break down?
+
+
+The property of our estimate obtained on some sample being applicable for the outside world. Can break down if there is some selection bias in our experiment.
+
+
+60. Which assumption should hold if you use difference in differences estimator?
+
+
+Parallel trend assumption. We assume the treated group would have had the same behavior as the control group had it not been for the treatment itself.
+
+
+61. Can you test the parallel trend assumption?
+
+
+Strictly speaking, no. But we can check whether the treatment and control moved roughly in parallel prior to the treatment, which gives us support for them likely having moved the same way without the treatment too. But we cannot be sure.
+
+
+62. What is matching? Why do we perform it?
+
+
+We select control firms that are similar to the treatment firms, such that the parallel trend assumption holds (or is more likely to hold).
+
+
+63. Name two different matching algorithms
+
+
+1 to k nearest neighbor matching (where you match the treated firm to the control firm with the closest attributes as determined with Euclidian distance) and propensity score matching (where you match the treated to a control firm that was most likely to also be treated).

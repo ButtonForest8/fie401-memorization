@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f1e8" />
+    <title>FIE401 | Oral Exam Cards</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lunasima:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./">
+          <span class="brand-mark">F</span>
+          <span><strong>FIE401</strong><small>ORAL EXAM CARDS</small></span>
+        </a>
+        <div class="top-actions">
+          <button class="icon-button" id="reset-progress" type="button" aria-label="Reset all progress" title="Reset all progress">↺</button>
+        </div>
+      </header>
+
+      <section class="intro">
+        <p class="eyebrow"></p>
+      </section>
+
+      <section class="dashboard" aria-label="Study progress">
+        <div class="progress-card">
+          <div class="progress-heading">
+            <div><span class="eyebrow"></span><strong><span id="mastered-count">0</span><span class="muted">/ 63 mastered</span></strong></div>
+            <span class="progress-percent" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track" aria-label="Question ratings">
+            <span class="progress-segment red" id="red-progress"></span>
+            <span class="progress-segment yellow" id="yellow-progress"></span>
+            <span class="progress-segment green" id="green-progress"></span>
+            <span class="progress-segment unrated" id="unrated-progress"></span>
+          </div>
+          <div class="progress-legend">
+            <span><i class="legend-dot red"></i><b id="red-count">0</b> needs work</span>
+            <span><i class="legend-dot yellow"></i><b id="yellow-count">0</b> almost there</span>
+            <span><i class="legend-dot green"></i><b id="green-count">0</b> mastered</span>
+          </div>
+          <p id="progress-caption">Start your first round to get moving.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">↗</span>
+          <span class="eyebrow">TOTAL PRACTICE</span>
+          <strong id="practice-total">0</strong>
+          <small>card reviews</small>
+        </div>
+        <div class="stat-card accent">
+          <span class="stat-icon">✦</span>
+          <span class="eyebrow">ACCURACY</span>
+          <strong id="accuracy">—</strong>
+          <small>correct answers</small>
+        </div>
+      </section>
+
+      <section class="study-area">
+        <div class="study-toolbar">
+          <div>
+            <span class="eyebrow">Now studying...</span>
+            <h2 id="topic-title">All questions</h2>
+          </div>
+          <label class="select-wrap">
+            <span class="sr-only">Choose a topic</span>
+            <select id="topic-select"></select>
+          </label>
+          <button class="shuffle-button" id="shuffle-button" type="button" aria-pressed="false">
+            <span class="shuffle-glyph">⤨</span><span class="shuffle-label">Shuffle</span><span class="toggle-track"><span class="toggle-knob"></span></span>
+          </button>
+        </div>
+
+        <div class="card-stage">
+          <div class="card-counter"><span id="current-number">1</span> <span class="muted">/ <span id="visible-total">63</span></span></div>
+          <div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flip flashcard">
+            <span class="card-face card-front">
+              <span class="card-label">QUESTION <span class="card-number" id="front-number">01</span><span class="card-topic" id="front-topic"></span></span>
+              <span class="question-text" id="question-text">Loading your cards…</span>
+              <span class="flip-hint">Click to reveal answer <span>↗</span></span>
+            </span>
+            <span class="card-face card-back">
+              <span class="card-label">ANSWER <span class="card-number" id="back-number">01</span><span class="card-topic" id="back-topic"></span></span>
+              <span class="answer-text" id="answer-text" title="Select text to highlight it"></span>
+              <span class="flip-hint">Click to see question <span>↗</span></span>
+            </span>
+          </div>
+          <div class="card-actions">
+            <button class="review-button rating-button frown" data-score="0" type="button" aria-label="Rate as needs work">
+              <svg class="face-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" /><circle cx="11" cy="13" r="1.5" /><circle cx="21" cy="13" r="1.5" /><path d="M10 23c1.7-3 10.3-3 12 0" /></svg><span><b>Needs work</b></span>
+            </button>
+            <button class="review-button rating-button neutral" data-score="1" type="button" aria-label="Rate as almost there">
+              <svg class="face-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" /><circle cx="11" cy="13" r="1.5" /><circle cx="21" cy="13" r="1.5" /><path d="M10 23h12" /></svg><span><b>Almost there</b></span>
+            </button>
+            <button class="review-button rating-button smile" data-score="2" type="button" aria-label="Rate as mastered">
+              <svg class="face-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" /><circle cx="11" cy="13" r="1.5" /><circle cx="21" cy="13" r="1.5" /><path d="M10 20c1.7 3 10.3 3 12 0" /></svg><span><b>Mastered</b></span>
+            </button>
+          </div>
+          <p class="keyboard-hint">Press <kbd>Space</kbd> to flip · <kbd>←</kbd> <kbd>→</kbd> to navigate</p>
+        </div>
+      </section>
+
+      <section class="question-list-section">
+        <div class="section-heading">
+          <div><span class="eyebrow">FULL DECK</span><h2>Every question, at a glance</h2></div>
+          <span class="list-note">Practice count is saved on this device</span>
+        </div>
+        <div class="question-list" id="question-list"></div>
+      </section>      
+      <section class="chart-section">
+        <div class="section-heading">
+          <div><span class="eyebrow">LAST 14 DAYS</span><h2>How it’s feeling</h2></div>
+          <span class="list-note">Daily average rating</span>
+        </div>
+        <div class="chart-card">
+          <svg id="score-chart" viewBox="0 0 800 260" role="img" aria-label="Average flashcard score over the past 14 days"></svg>
+        </div>
+      </section>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
