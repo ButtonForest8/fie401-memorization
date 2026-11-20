@@ -404,7 +404,7 @@ In experiments, we select who gets treatments and controls. In quasi-experiments
 58. What is internal validity? When can it break down?
 
 
-The property that the estimate obtained from the experiments we measure is actually measuring what we intend to measure. Can break down subject behavior is affected by being in the experiment, if we fail to follow strict protocol, fail to randomize or if there is attrition amongst the subjects.
+The property that the estimate obtained from the experiments we measure is actually measuring what we intend to measure. Can break down if subject behavior is affected by being in the experiment, if we fail to follow strict protocol, fail to randomize or if there is attrition amongst the subjects.
 
 
 59. What is external validity? When can it break down?
