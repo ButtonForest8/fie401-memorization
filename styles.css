@@ -248,10 +248,10 @@ select {
   padding: 11px 16px;
   font-size: 12px;
   box-shadow: var(--shadow);
-  transition: transform .14s, box-shadow .14s, filter .14s;
+  transition: box-shadow .06s;
 }
-.review-button:hover { filter: brightness(1.035); transform: translateY(-1px); }
-.review-button:active { transform: translateY(1px); box-shadow: var(--shadow-inset); }
+.review-button:hover { filter: brightness(1.035); }
+.review-button:active { box-shadow: var(--shadow-inset); }
 .rating-button {
   position: relative;
   display: inline-flex;
@@ -265,7 +265,7 @@ select {
     inset 0 1px 0 rgba(255,255,255,.98),
     inset 0 -1px 0 rgba(86,103,112,.18);
   background-position: center, center;
-  transition: transform .14s, box-shadow .14s, filter .14s;
+  transition: box-shadow .06s;
 }
 .rating-button::after {
   content: "";
@@ -305,7 +305,6 @@ select {
   border-color: #6d987d;
 }
 .rating-button:active {
-  transform: translateY(2px);
   filter: brightness(.9) saturate(1.08);
   box-shadow:
     0 1px 1px rgba(45,61,73,.18),
