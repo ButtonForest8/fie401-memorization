@@ -217,12 +217,15 @@ function renderChart() {
 
 function renderList() {
   $("#question-list").innerHTML = state.cards.map((card) => {
-    const practice = state.progress[card.id]?.practice || 0;
+    const progress = state.progress[card.id];
+    const practice = progress?.practice || 0;
+    const score = progress?.score ?? (progress?.correct > 0 ? 2 : progress?.practice > 0 ? 0 : null);
+    const ratingClass = score === 2 ? " rating-green" : score === 1 ? " rating-yellow" : score === 0 ? " rating-red" : "";
     const active = state.visibleCards[state.currentIndex]?.id === card.id ? " active" : "";
     return `<button class="list-item${active}" type="button" data-card-id="${card.id}">
       <span class="list-number">${String(card.id).padStart(2, "0")}</span>
       <span class="list-question">${escapeHtml(card.question)}</span>
-      <span class="list-count${practice ? " seen" : ""}">${practice}</span>
+      <span class="list-count${practice ? ` seen${ratingClass}` : ""}">${practice}</span>
     </button>`;
   }).join("");
 }

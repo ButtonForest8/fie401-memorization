@@ -332,7 +332,10 @@ kbd { border: 1px solid #9dacb5; border-radius: 4px; padding: 2px 5px; backgroun
 .list-number { font: 10px var(--ui-font); color: var(--muted); }
 .list-question { font-size: 12px; line-height: 1.35; }
 .list-count { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid #9eafb9; border-radius: 50%; background: linear-gradient(#fff, #d3dee4); box-shadow: 0 1px 2px rgba(58,78,91,.18), inset 0 1px 0 white; color: var(--muted); font: 10px var(--ui-font); }
-.list-count.seen { background: linear-gradient(#83c39d, #4b9368); color: white; border-color: #5b9874; }
+.list-count.seen { color: white; }
+.list-count.rating-red { background: linear-gradient(#e79280, #b94d3b); border-color: #b96b5d; }
+.list-count.rating-yellow { background: linear-gradient(#f1cd63, #c79329); border-color: #c29a43; }
+.list-count.rating-green { background: linear-gradient(#83c39d, #4b9368); border-color: #5b9874; }
 
 .chart-section { margin-top: 72px; }
 .chart-card { position: relative; overflow: hidden; margin-top: 16px; border: 1px solid #9dabb4; border-radius: 10px; padding: 12px 14px 5px; background: linear-gradient(rgba(255,255,255,.92), rgba(227,235,240,.72)); box-shadow: var(--shadow), inset 0 1px 0 white; }
