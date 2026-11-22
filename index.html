@@ -62,17 +62,32 @@
 
       <section class="study-area">
         <div class="study-toolbar">
-          <div>
+          <div class="study-title">
             <span class="eyebrow">Now studying...</span>
             <h2 id="topic-title">All questions</h2>
           </div>
-          <label class="select-wrap">
-            <span class="sr-only">Choose a topic</span>
-            <select id="topic-select"></select>
-          </label>
-          <button class="shuffle-button" id="shuffle-button" type="button" aria-pressed="false">
-            <span class="shuffle-glyph">⤨</span><span class="shuffle-label">Shuffle</span><span class="toggle-track"><span class="toggle-knob"></span></span>
-          </button>
+          <div class="study-controls">
+            <label class="select-wrap">
+              <span class="sr-only">Choose a topic</span>
+              <select id="topic-select"></select>
+            </label>
+            <div class="deck-filter-control">
+              <button class="deck-filter-button" id="deck-filter-button" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose cards to test">
+                <span class="deck-filter-dots" id="deck-filter-dots" aria-hidden="true">
+                  <i class="deck-dot red"></i><i class="deck-dot yellow"></i><i class="deck-dot green"></i>
+                </span>
+                <span class="deck-filter-arrow" aria-hidden="true">⌄</span>
+              </button>
+              <div class="deck-filter-menu" id="deck-filter-menu" role="listbox" aria-label="Cards to test" hidden>
+                <button type="button" role="option" data-deck-filter="all" aria-selected="true"><span class="deck-filter-dots"><i class="deck-dot red"></i><i class="deck-dot yellow"></i><i class="deck-dot green"></i></span></button>
+                <button type="button" role="option" data-deck-filter="yellow-red" aria-selected="false"><span class="deck-filter-dots"><i class="deck-dot red"></i><i class="deck-dot yellow"></i></span></button>
+                <button type="button" role="option" data-deck-filter="red" aria-selected="false"><span class="deck-filter-dots"><i class="deck-dot red"></i></span></button>
+              </div>
+            </div>
+            <button class="shuffle-button" id="shuffle-button" type="button" aria-pressed="false">
+              <span class="shuffle-glyph">⤨</span><span class="shuffle-label">Shuffle</span><span class="toggle-track"><span class="toggle-knob"></span></span>
+            </button>
+          </div>
         </div>
 
         <div class="card-stage">

@@ -6,6 +6,7 @@ const state = {
   currentIndex: 0,
   flipped: false,
   topic: "all",
+  deckFilter: "all",
   shuffled: false,
   progress: loadProgress(),
   highlights: loadHighlights(),
@@ -104,14 +105,58 @@ function buildTopicSelect() {
   $("#topic-select").innerHTML = ['<option value="all">All topics</option>', ...topics.map((topic) => `<option value="${escapeHtml(topic)}">${escapeHtml(topic)}</option>`)].join("");
 }
 
+function getLatestScore(cardId) {
+  const item = state.progress[cardId];
+  if (item?.score !== undefined) return item.score;
+  if (item?.correct > 0) return 2;
+  if (item?.practice > 0) return 0;
+  return null;
+}
+
+function getFilteredCards() {
+  let cards = state.topic === "all" ? state.cards : state.cards.filter((card) => card.topic === state.topic);
+  if (state.deckFilter === "yellow-red") {
+    cards = cards.filter((card) => {
+      const score = getLatestScore(card.id);
+      return score === null || score === 0 || score === 1;
+    });
+  } else if (state.deckFilter === "red") {
+    cards = cards.filter((card) => {
+      const score = getLatestScore(card.id);
+      return score === null || score === 0;
+    });
+  }
+  return cards;
+}
+
 function render() {
-  state.visibleCards = state.topic === "all" ? state.cards : state.cards.filter((card) => card.topic === state.topic);
+  state.visibleCards = getFilteredCards();
   state.currentIndex = Math.min(state.currentIndex, state.visibleCards.length - 1);
+  if (state.currentIndex < 0) state.currentIndex = 0;
   const card = state.visibleCards[state.currentIndex];
   state.flipped = false;
   $("#flashcard").classList.remove("flipped");
-  $("#topic-title").textContent = state.topic === "all" ? "All questions" : state.topic.replace(/^Week \d+: /, "");
+  const topicTitle = state.topic === "all" ? "All questions" : state.topic.replace(/^Week \d+: /, "");
+  const filterTitle = state.deckFilter === "yellow-red" ? " · Yellow + red" : state.deckFilter === "red" ? " · Red only" : "";
+  $("#topic-title").textContent = `${topicTitle}${filterTitle}`;
   $("#visible-total").textContent = state.visibleCards.length;
+  if (!card) {
+    $("#current-number").textContent = "—";
+    $("#front-number").textContent = "—";
+    $("#back-number").textContent = "—";
+    $("#front-topic").textContent = "";
+    $("#back-topic").textContent = "";
+    $("#question-text").textContent = "No cards match this filter.";
+    $("#answer-text").textContent = "Try another deck filter or rate more questions.";
+    document.querySelectorAll(".rating-button").forEach((button) => { button.disabled = true; });
+    $("#topic-select").value = state.topic;
+    updateDeckFilterButton();
+    renderStats();
+    renderList();
+    renderChart();
+    return;
+  }
+  document.querySelectorAll(".rating-button").forEach((button) => { button.disabled = false; });
   $("#current-number").textContent = card.id;
   $("#front-number").textContent = String(card.id).padStart(2, "0");
   $("#back-number").textContent = String(card.id).padStart(2, "0");
@@ -120,6 +165,7 @@ function render() {
   $("#question-text").textContent = card.question;
   renderAnswer(card);
   $("#topic-select").value = state.topic;
+  updateDeckFilterButton();
   renderStats();
   renderList();
   renderChart();
@@ -236,6 +282,7 @@ function flip() {
 }
 
 function move(direction) {
+  if (!state.visibleCards.length) return;
   state.currentIndex = (state.currentIndex + direction + state.visibleCards.length) % state.visibleCards.length;
   const flashcard = $("#flashcard");
   flashcard.classList.remove("slide-next", "slide-previous");
@@ -246,6 +293,7 @@ function move(direction) {
 }
 
 function review(score) {
+  if (!state.visibleCards.length) return;
   const card = state.visibleCards[state.currentIndex];
   const existing = state.progress[card.id] || { practice: 0, correct: 0, wrong: 0 };
   existing.practice += 1;
@@ -347,6 +395,41 @@ $("#topic-select").addEventListener("change", (event) => {
   state.topic = event.target.value;
   state.currentIndex = 0;
   render();
+});
+function updateDeckFilterButton() {
+  const dots = state.deckFilter === "all"
+    ? '<i class="deck-dot red"></i><i class="deck-dot yellow"></i><i class="deck-dot green"></i>'
+    : state.deckFilter === "yellow-red"
+      ? '<i class="deck-dot red"></i><i class="deck-dot yellow"></i>'
+      : '<i class="deck-dot red"></i>';
+  $("#deck-filter-dots").innerHTML = dots;
+  document.querySelectorAll("[data-deck-filter]").forEach((option) => {
+    option.setAttribute("aria-selected", String(option.dataset.deckFilter === state.deckFilter));
+  });
+}
+
+$("#deck-filter-button").addEventListener("click", () => {
+  const menu = $("#deck-filter-menu");
+  const open = menu.hidden;
+  menu.hidden = !open;
+  $("#deck-filter-button").setAttribute("aria-expanded", String(open));
+});
+document.querySelectorAll("[data-deck-filter]").forEach((option) => {
+  option.addEventListener("click", () => {
+    state.deckFilter = option.dataset.deckFilter;
+    $("#deck-filter-menu").hidden = true;
+    $("#deck-filter-button").setAttribute("aria-expanded", "false");
+    state.currentIndex = 0;
+    updateDeckFilterButton();
+    render();
+    showToast(state.deckFilter === "all" ? "Testing all cards." : state.deckFilter === "yellow-red" ? "Testing yellow and red cards." : "Testing red cards only.");
+  });
+});
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".deck-filter-control")) {
+    $("#deck-filter-menu").hidden = true;
+    $("#deck-filter-button").setAttribute("aria-expanded", "false");
+  }
 });
 $("#shuffle-button").addEventListener("click", () => {
   const currentId = state.visibleCards[state.currentIndex]?.id;
