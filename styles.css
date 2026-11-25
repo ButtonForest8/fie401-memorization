@@ -192,7 +192,19 @@ h2 { font-family: "Lunasima", sans-serif; font-weight: 700; margin: 0; }
 .deck-dot.green { background: #469263; }
 .deck-dot.yellow { background: #dfaa3b; }
 .deck-dot.red { background: #d66a56; }
-.deck-filter-arrow { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); height: 10px; display: grid; place-items: center; color: #397ba5; line-height: 1; }
+.deck-filter-button::after {
+  content: "⌄";
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  height: 12px;
+  display: grid;
+  place-items: start center;
+  color: #397ba5;
+  line-height: 12px;
+  font-size: 16px;
+  pointer-events: none;
+}
 .deck-filter-menu {
   position: absolute;
   right: 0;
